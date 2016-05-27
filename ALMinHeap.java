@@ -188,6 +188,8 @@ public class ALMinHeap {
     private void swap( int pos1, int pos2 ) {
 	_heap.set( pos1, _heap.set( pos2, _heap.get(pos1) ) );	
     }
+
+    public int size() { return _heap.size(); }
     //********************************************
 
 
