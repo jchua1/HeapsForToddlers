@@ -11,8 +11,8 @@
 public class RunMed {
 
     //instance vars
-    private ALMaxHeap leftHeap;  //for lower range of dataset
-    private ALMinHeap rightHeap; //for upper range of dataset
+    private static ALMaxHeap leftHeap;  //for lower range of dataset
+    private static ALMinHeap rightHeap; //for upper range of dataset
 
 
     /*****************************************************
@@ -20,7 +20,8 @@ public class RunMed {
      *****************************************************/
     public RunMed() 
     { 
-
+	leftHeap = new ALMaxHeap();
+	rightHeap = new ALMinHeap();
     }//O(1)
 
 
@@ -30,7 +31,12 @@ public class RunMed {
      *****************************************************/
     public double getMedian() 
     {
-
+	if (leftHeap.size() > rightHeap.size())
+	    return leftHeap.peekMax();
+	else if (rightHeap.size() > leftHeap.size())
+	    return rightHeap.peekMin();
+	else 
+	    return (leftHeap.peekMax() + rightHeap.peekMin()) / 2.0;
     }//O(1)
 
 
@@ -41,8 +47,20 @@ public class RunMed {
      *                getMedian() can run in constant time
      *****************************************************/
     public void insert( int addVal )
-    {   
-     }//O(?)
+    {   	
+	if (isEmpty())
+	    leftHeap.add(addVal);
+	else {
+	    if (addVal > leftHeap.peekMax())
+		rightHeap.add(addVal);
+	    else
+		leftHeap.add(addVal);
+	}
+	if (leftHeap.size() - rightHeap.size() > 1)
+	    rightHeap.add(leftHeap.removeMax());
+	else if (rightHeap.size() - leftHeap.size() > 1)
+	    leftHeap.add(rightHeap.removeMin());
+    }//O(logn)
 
 
 
@@ -52,15 +70,15 @@ public class RunMed {
      *****************************************************/
     public boolean isEmpty() 
     {
-
-    }//O(?)
+	return rightHeap.isEmpty() && leftHeap.isEmpty();
+    }//O(1)
 
 
 
     //main method for testing
     public static void main( String[] args ) {
 
-	/*~~~V~~~~~~~~~~~~move~me~down~~~~~~~~~~~~~V~~~
+	
         RunMed med = new RunMed();
 
         med.insert(1);
@@ -73,19 +91,11 @@ public class RunMed {
 	System.out.println( med.getMedian() ); //4
         med.insert(9);
 	System.out.println( med.getMedian() ); //5
+	/*~~~V~~~~~~~~~~~~move~me~down~~~~~~~~~~~~~V~~~
 	~~~~~|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|~~~*/
 
     }//end main()
 
 }//end class RunMed
 
-
-
-    /*****************************************************
-     * 
-     *****************************************************/
-    // (  )
-    // {
-    // 	/*** YOUR IMPLEMENTATION HERE ***/
-    // }//O(?)
 
